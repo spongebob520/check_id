@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-import re
+import string
 
 speech_id=sys.argv[1]
 print speech_id
@@ -20,14 +20,13 @@ else:
 	print desc_file
 	with open(desc_file) as f:
 		for line in f:
-			line=line.strip()
+			line=line.strip().decode('utf-8')
 			#找到数据编号对应的行
-			pattern=re.compile(u'[\u6570][\u636E][\u7F16][\u53F7]:|：\s+(.+)')
-			ID_num=pattern.findall(line.strip().decode('utf8'))
-			print ID_num[0].encode('utf8')
-			if(speech_id==ID_num):
-				print 'Correct!'
-			else:
-				print 'aaa'
-				line.replace(ID_num,speech_id)
-				print 'ERROR!'+ID_num+'-->'+speech_id
+			if(string.find(line,u'数据编号') != -1):
+				print line
+				origin_id=line.solit('\t')[1]
+				if(speech_id==origin_id):
+					print 'Correct!'
+				else:
+					line.replace(origin_id,speech_id)
+					print 'ERROR!'+origin_id+'-->'+speech_id
